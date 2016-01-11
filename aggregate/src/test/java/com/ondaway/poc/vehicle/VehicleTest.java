@@ -1,14 +1,17 @@
+package com.ondaway.poc.vehicle;
+
+import static org.junit.Assert.*;
+
 import com.ondaway.poc.ddd.Event;
-import com.ondaway.poc.vehicle.Vehicle;
 import com.ondaway.poc.vehicle.event.Activated;
 import com.ondaway.poc.vehicle.event.LocationChanged;
+
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

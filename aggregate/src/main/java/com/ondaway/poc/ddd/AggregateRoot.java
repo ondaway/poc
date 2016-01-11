@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
+
 import org.reflections.scanners.MethodParameterScanner;
 
 /**
