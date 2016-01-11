@@ -3,12 +3,15 @@ package com.ondaway.poc.vehicle;
 import com.ondaway.poc.ddd.AggregateRoot;
 import com.ondaway.poc.vehicle.event.Activated;
 import com.ondaway.poc.vehicle.event.LocationChanged;
+import java.util.UUID;
 
 /**
  *
  * @author ernesto
  */
 public class Vehicle extends AggregateRoot {
+    
+    public final UUID id = UUID.randomUUID();
     
     boolean active = false;
     Float x = 0f;
@@ -17,7 +20,7 @@ public class Vehicle extends AggregateRoot {
     public void activate() {
         if (active)
             throw new IllegalStateException("vehicle already activated");
-        applyEvent(new Activated());
+        applyEvent(new Activated(id));
     }
     
     public void changeLocation(Float x, Float y) {

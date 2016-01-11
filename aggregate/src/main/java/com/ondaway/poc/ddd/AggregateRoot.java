@@ -24,13 +24,14 @@ public class AggregateRoot {
     }
     
     public void applyEvent(Event event) {
-        Reflections reflections = new Reflections("com.ondaway.poc", new MethodAnnotationsScanner(), new MethodParameterScanner());
+        Reflections reflections = new Reflections("com.ondaway.poc", new MethodParameterScanner());
         Set<Method> methods = reflections.getMethodsMatchParams(event.getClass());
         methods.stream().forEach( method -> {
             try {
                 method.invoke(this, event);
                 pendingEvents.add(event);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                //TODO:  throw new ....???
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         });

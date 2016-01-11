@@ -47,14 +47,14 @@ public class VehicleTest {
         // Then
         List<Event> events = vehicle.getPendingEvents();
         assertTrue(events.size() == 1);
-        assertTrue(events.get(0).equals(new Activated()));
+        assertTrue(events.get(0).equals(new Activated(vehicle.id)));
     }
 
     @Test( expected = IllegalStateException.class)
     public void activateActiveVehicle() throws Exception {
 
         // Given
-        vehicle.applyEvent(new Activated());
+        vehicle.applyEvent(new Activated(vehicle.id));
         
         //When
         vehicle.activate();
@@ -75,7 +75,7 @@ public class VehicleTest {
     public void moveActiveVehicleTest() throws Exception {
         
         // Given
-        vehicle.applyEvent(new Activated());
+        vehicle.applyEvent(new Activated(vehicle.id));
 
         // When
         vehicle.changeLocation(1f, 1f);
