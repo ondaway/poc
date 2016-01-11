@@ -29,6 +29,7 @@ public class AggregateRoot {
         methods.stream().forEach( method -> {
             try {
                 method.invoke(this, event);
+                pendingEvents.add(event);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
