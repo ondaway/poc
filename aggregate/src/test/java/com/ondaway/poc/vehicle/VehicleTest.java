@@ -24,21 +24,9 @@ public class VehicleTest {
 
     Vehicle vehicle;
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
         vehicle = new Vehicle();
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -57,7 +45,7 @@ public class VehicleTest {
     public void activateActiveVehicle() throws Exception {
 
         // Given
-        vehicle.applyEvent(new Activated(vehicle.id));
+        vehicle.mutate(new Activated(vehicle.id));
         
         //When
         vehicle.activate();
@@ -78,7 +66,7 @@ public class VehicleTest {
     public void moveActiveVehicleTest() throws Exception {
         
         // Given
-        vehicle.applyEvent(new Activated(vehicle.id));
+        vehicle.mutate(new Activated(vehicle.id));
 
         // When
         vehicle.changeLocation(1f, 1f);

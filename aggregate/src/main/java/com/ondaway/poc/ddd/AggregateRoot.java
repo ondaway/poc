@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.reflections.Reflections;
@@ -17,13 +18,15 @@ import org.reflections.scanners.MethodParameterScanner;
  */
 public class AggregateRoot {
     
+    public final UUID id = UUID.randomUUID();
+    
     private final List<Event> pendingEvents;
 
     public AggregateRoot() {
         this.pendingEvents = new ArrayList();
     }
     
-    public void applyEvent(Event event) {
+    public void mutate(Event event) {
         Reflections reflections = new Reflections("com.ondaway.poc", new MethodParameterScanner());
         Set<Method> methods = reflections.getMethodsMatchParams(event.getClass());
         methods.stream().forEach( method -> {
