@@ -1,0 +1,39 @@
+web:
+    image: tomcat
+#   image: node
+    
+rest:
+    image: mondary/dropwizard
+    ports:
+        - 80:80
+
+domain:
+    image: java8
+#   image: akka
+
+queryLayer:
+    image: java8
+#   image: akka    
+
+bus:
+    image: rabbitmq
+#   image: zeromq
+#   image: redis
+    
+eventStore:
+    image: adbrowne/eventstore
+#   image: spotify/kafka
+
+eventHandlers:
+    image: java8
+#   image: akka    
+
+viewStore:
+    image: mongo
+    ports:
+        - 27017:27017
+     
+graphStore:
+    image: neo4j
+    ports:
+        - 7474:7474        

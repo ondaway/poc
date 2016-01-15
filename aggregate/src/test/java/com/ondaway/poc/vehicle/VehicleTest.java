@@ -7,10 +7,7 @@ import com.ondaway.poc.vehicle.event.Activated;
 import com.ondaway.poc.vehicle.event.LocationChanged;
 
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
