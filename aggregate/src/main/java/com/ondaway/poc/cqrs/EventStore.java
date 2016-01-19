@@ -16,4 +16,5 @@ public interface EventStore {
 
     public int length();
     
+    
 }

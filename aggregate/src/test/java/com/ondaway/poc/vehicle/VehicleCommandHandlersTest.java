@@ -1,5 +1,6 @@
 package com.ondaway.poc.vehicle;
 
+import com.ondaway.poc.cqrs.EventPublisher;
 import com.ondaway.poc.cqrs.EventRepository;
 import com.ondaway.poc.cqrs.EventStore;
 import com.ondaway.poc.cqrs.EventStoreInMemory;
@@ -20,8 +21,8 @@ public class VehicleCommandHandlersTest {
 
     @Before
     public void Setup() {
-        EventStore eventStore = new EventStoreInMemory();
-        Repository<Vehicle> vehicles = new EventRepository(eventStore);
+        EventStore store = new EventStoreInMemory(null);
+        Repository<Vehicle> vehicles = new EventRepository(store);
         vehicleHandlers = new VehicleCommandHandlers(vehicles);
 
         vehicle = new Vehicle();

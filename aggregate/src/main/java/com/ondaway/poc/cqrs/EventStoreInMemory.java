@@ -13,6 +13,11 @@ import java.util.UUID;
 public class EventStoreInMemory implements EventStore {
 
     Map<UUID, List<Event>> streams = new HashMap();
+    EventPublisher publisher;
+    
+    public EventStoreInMemory(EventPublisher publisher) {
+        this.publisher = publisher;
+    }
     
     @Override
     public void save(UUID id, List<Event> events) {
