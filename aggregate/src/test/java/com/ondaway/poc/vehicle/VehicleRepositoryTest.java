@@ -31,7 +31,7 @@ public class VehicleRepositoryTest {
 
         //Given
         vehicle.mutate(new Activated(vehicle.id));
-        vehicle.mutate(new LocationChanged(1f, 1f));
+        vehicle.mutate(new LocationChanged(vehicle.id,1f, 1f));
 
         // When
         repository.Save(vehicle);

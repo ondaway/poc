@@ -1,6 +1,8 @@
 package com.ondaway.poc.vehicle.event;
 
 import com.ondaway.poc.ddd.Event;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,9 +13,11 @@ import java.util.UUID;
 public class Activated implements Event {
     
     private final UUID id;
+    public final long timestamp;
 
     public Activated(UUID id) {
         this.id = id;
+        this.timestamp = new Timestamp(new Date().getTime()).getTime();
     }
 
     @Override

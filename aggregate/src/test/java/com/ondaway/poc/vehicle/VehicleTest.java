@@ -71,7 +71,7 @@ public class VehicleTest {
         // Then
         List<Event> events = vehicle.getPendingEvents();
         assertTrue(events.size() == 2);
-        assertTrue(events.get(1).equals(new LocationChanged(1f,1f)));
+        assertTrue(events.get(1).equals(new LocationChanged(vehicle.id,1f,1f)));
     }
 
 }
