@@ -32,12 +32,12 @@ public class AggregateRoot {
         methods.stream().forEach( method -> {
             try {
                 method.invoke(this, event);
-                pendingEvents.add(event);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 //TODO:  throw new ....???
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         });
+        pendingEvents.add(event);
     }
     
     public List<Event> getPendingEvents() {

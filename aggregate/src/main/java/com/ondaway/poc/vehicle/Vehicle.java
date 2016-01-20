@@ -11,8 +11,6 @@ import com.ondaway.poc.vehicle.event.LocationChanged;
 public class Vehicle extends AggregateRoot {
 
     boolean active = false;
-    Float x = 0f;
-    Float y = 0f;
 
     public void activate() {
         if (active) {
@@ -33,9 +31,4 @@ public class Vehicle extends AggregateRoot {
         this.active = true;
     }
 
-    // TODO: should be private but reflections needs this to be public in order to invoke it
-    public void apply(LocationChanged event) {
-        this.x = event.x;
-        this.y = event.y;
-    }
 }
