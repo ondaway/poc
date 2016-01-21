@@ -1,5 +1,6 @@
 package com.ondaway.poc.vehicle;
 
+import com.ondaway.poc.cqrs.Command;
 import com.ondaway.poc.ddd.Repository;
 import com.ondaway.poc.vehicle.command.Activate;
 import com.ondaway.poc.vehicle.command.ReportStatus;
@@ -17,13 +18,13 @@ public class VehicleCommandHandlers {
         this.vehicles = repository;
     }
 
-    public void handle(Activate command) {
+    public void handleActivate(Activate command) {
         Vehicle vehicle = _findVehicle(command.vehicle);
         vehicle.activate();
         vehicles.Save(vehicle);
     }
 
-    public void handle(ReportStatus command) {
+    public void handleReportStatus(ReportStatus command) {
         Vehicle vehicle = _findVehicle(command.vehicle);
         vehicle.changeLocation(command.x, command.y);
         if (!vehicle.active && command.active) {

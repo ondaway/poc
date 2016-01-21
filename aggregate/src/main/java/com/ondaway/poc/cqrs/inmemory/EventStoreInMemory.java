@@ -1,5 +1,7 @@
-package com.ondaway.poc.cqrs;
+package com.ondaway.poc.cqrs.inmemory;
 
+import com.ondaway.poc.cqrs.EventPublisher;
+import com.ondaway.poc.cqrs.EventStore;
 import com.ondaway.poc.ddd.Event;
 import java.util.HashMap;
 import java.util.List;

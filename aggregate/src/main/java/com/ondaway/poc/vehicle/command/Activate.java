@@ -1,5 +1,6 @@
 package com.ondaway.poc.vehicle.command;
 
+import com.ondaway.poc.cqrs.Command;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
@@ -8,7 +9,7 @@ import java.util.UUID;
  *
  * @author jeroldan
  */
-public class Activate {
+public class Activate implements Command {
 
     public final UUID vehicle;
     public final UUID activator;

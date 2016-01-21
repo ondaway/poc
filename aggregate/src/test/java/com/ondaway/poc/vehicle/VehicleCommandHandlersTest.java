@@ -3,7 +3,7 @@ package com.ondaway.poc.vehicle;
 import com.ondaway.poc.cqrs.EventPublisher;
 import com.ondaway.poc.cqrs.EventRepository;
 import com.ondaway.poc.cqrs.EventStore;
-import com.ondaway.poc.cqrs.EventStoreInMemory;
+import com.ondaway.poc.cqrs.inmemory.EventStoreInMemory;
 import com.ondaway.poc.ddd.Repository;
 import com.ondaway.poc.vehicle.command.Activate;
 import java.util.UUID;
@@ -36,7 +36,7 @@ public class VehicleCommandHandlersTest {
         UUID activator = UUID.randomUUID();
 
         // When
-        vehicleHandlers.handle(new Activate(vehicle.id, activator));
+        vehicleHandlers.handleActivate(new Activate(vehicle.id, activator));
 
         // Then capture repository events ???
     }

@@ -1,12 +1,13 @@
 package com.ondaway.poc.vehicle.command;
 
+import com.ondaway.poc.cqrs.Command;
 import java.util.UUID;
 
 /**
  *
  * @author jeroldan
  */
-public class ReportStatus {
+public class ReportStatus implements Command {
     
     public final UUID vehicle;
     public final boolean active;
