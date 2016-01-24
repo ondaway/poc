@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>com.ondaway.poc.commandbus</groupId>
+    <artifactId>handler</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>OnDaWay CommandBus PoC handler</name>
+ 
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Project information -->
+    <description>OnDaWay commandBus PoC Java handler</description>
+    <url>https://github.com/ondaway/poc/commandbus/javahandler</url>
+    <inceptionYear>2016</inceptionYear>
+    <licenses>
+        <license></license>
+    </licenses>
+    <organization>
+        <name>OnDaWay team</name>
+        <url>https://github.com/ondaway</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Jose</name>
+            <url>https://github.com/jomoespe</url>
+        </developer>
+        <developer>
+            <name>David</name>
+            <url>https://github.com/davidparracatalan</url>
+        </developer>
+        <developer>
+            <name>Ernesto</name>
+            <url>https://github.com/jeroldangarcia</url>
+        </developer>
+        <developer>
+            <name>Javier</name>
+            <url>https://github.com/jbbarquero</url>
+        </developer>
+    </developers>
+    
+</project>

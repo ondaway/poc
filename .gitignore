@@ -1,2 +1,4 @@
 /poc/target/
 /aggregate/target/
+/commandbus/java-command-handler$/target/
+/commandbus/go-command-publisher/publisher
