@@ -15,7 +15,7 @@ Command Bus PoC
     |  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()       Command bus       )--(amqp)--> |  Handler  |  Context    <
     | command |       |  point  |             |             --------------------------             |           |  Aggregate   >
      ---------         --------- -----------                                                        ----------- --------------
-                       (Publisher)                       (queue name: task_queue)                 (Worker)
+                       [Publisher]                           [queue name: task_queue]                [Worker]
 
 
 # Requisitos
@@ -41,15 +41,15 @@ Ha sido probado con:
 
   - Levantar el servidor RabbitMQ que actua como *command bus*. Desde la raiz del proyecto:
 
-    # docker-compose up commandbus
+    $ docker-compose up commandbus
 
   - Ejecutar el *command handler*: desde la raiz del proyecto:
 
-    # java -jar java-command-handler/target/handler-0.1.0-SNAPSHOT.jar
+    $ java -jar java-command-handler/target/handler-0.1.0-SNAPSHOT.jar
 
   - Ejecutar el *command publisher*. Desde el directorio del proyecto:
 
-    # publisher
+    $ publisher
 
 
 
@@ -62,7 +62,7 @@ Ha sido probado con:
 
 Ejemplo de como realizar la petición POST con *curl* y unos datos de prueba.
 
-    # curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" -d @sample_command.json http://localhost:8080/vehicle/{id}/status
+    $ curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" -d @sample_command.json http://localhost:8080/vehicle/{id}/status
 
 //TODO (describir como verificar que la prueba ha funcionado. Básicamente es mirar la consola del proceso Java)
 
@@ -85,5 +85,3 @@ Descripción de los campos:
   - *active*: flag indicador de si el vehículo está activo o no
   - *lat*: Latitud
   - *lng*: Longitud
-
-
