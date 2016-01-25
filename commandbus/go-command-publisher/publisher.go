@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -9,14 +10,12 @@ import (
 	"github.com/streadway/amqp"
 )
 
-
 type ReportStatus struct {
-	Vehicle   string    `json:"vehicle"`
-	Active    bool      `json:"active"`
-	Latitude  float64   `json:"lat"`
-    Longitude float64   `json:"lng"`
+	Vehicle   string  `json:"vehicle"`
+	Active    bool    `json:"active"`
+	Latitude  float64 `json:"lat"`
+	Longitude float64 `json:"lng"`
 }
-
 
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -44,11 +43,20 @@ func main() {
 	)
 	failOnError(err, "Failed to declare a queue")
 
-	body := bodyFrom(os.Args)
+	//body := bodyFrom(os.Args)
+
+	reportStatus := ReportStatus{
+		Vehicle:   "38400000-8cf0-11bd-b23e-10b96e4ef00d",
+		Active:    true,
+		Latitude:  1.1,
+		Longitude: 2.2,
+	}
+	body, _ := json.Marshal(reportStatus)
+
 	err = ch.Publish(
-		"",           // exchange
-		q.Name,       // routing key
-		false,        // mandatory
+		"",     // exchange
+		q.Name, // routing key
+		false,  // mandatory
 		false,
 		amqp.Publishing{
 			DeliveryMode: amqp.Persistent,
