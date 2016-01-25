@@ -9,6 +9,15 @@ import (
 	"github.com/streadway/amqp"
 )
 
+
+type ReportStatus struct {
+	Vehicle   string    `json:"vehicle"`
+	Active    bool      `json:"active"`
+	Latitude  float64   `json:"lat"`
+    Longitude float64   `json:"lng"`
+}
+
+
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
