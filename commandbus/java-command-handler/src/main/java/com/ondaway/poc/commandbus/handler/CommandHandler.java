@@ -43,10 +43,10 @@ public class CommandHandler {
         final Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                ReportStatus reportStatusCmd = REPORT_STATUS_CMD_MAPPER.readValue(body, ReportStatus.class);
-                
-                System.out.println(" [x] Received '" + reportStatusCmd.vehicle + "'");
                 try {
+                    ReportStatus reportStatusCmd = REPORT_STATUS_CMD_MAPPER.readValue(body, ReportStatus.class);
+
+                    System.out.println(" [x] Received '" + reportStatusCmd.vehicle + "'");
                     doWork(reportStatusCmd);
                 } finally {
                     System.out.println(" [x] Done");
