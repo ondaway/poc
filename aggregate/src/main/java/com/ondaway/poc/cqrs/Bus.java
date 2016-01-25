@@ -6,8 +6,9 @@ import java.util.function.Consumer;
  *
  * @author ernesto
  */
-public interface Bus {
+public interface Bus extends CommandSender, EventPublisher {
 
-    <T extends Command> void registerCommandHandler(Consumer<T> handler);
+    <T> void registerHandler(String id, Consumer<T> handler);
+    
 
 }

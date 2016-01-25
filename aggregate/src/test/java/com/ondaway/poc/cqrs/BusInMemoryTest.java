@@ -1,7 +1,9 @@
 package com.ondaway.poc.cqrs;
 
-import com.ondaway.poc.cqrs.inmemory.BusInMemory;
+import com.ondaway.poc.cqrs.inmemory.InMemorySynchroBus;
 import com.ondaway.poc.vehicle.VehicleCommandHandlers;
+import com.ondaway.poc.vehicle.command.Activate;
+import com.ondaway.poc.vehicle.command.ReportStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,13 +13,14 @@ import org.junit.Test;
  */
 public class BusInMemoryTest {
 
-    Bus bus = new BusInMemory();
+    Bus bus = new InMemorySynchroBus();
     VehicleCommandHandlers vehicleCommandHandlers = new VehicleCommandHandlers((null));
 
     @Test
     public void registerCommandHandler() {
-        bus.registerCommandHandler(vehicleCommandHandlers::handleActivate);
-        bus.registerCommandHandler(vehicleCommandHandlers::handleReportStatus);
+        bus.registerHandler(Activate.class.getName(), vehicleCommandHandlers::handleActivate);
+        bus.registerHandler(ReportStatus.class.getName(), vehicleCommandHandlers::handleReportStatus);
         Assert.assertTrue(true); //TODO
     }
+
 }

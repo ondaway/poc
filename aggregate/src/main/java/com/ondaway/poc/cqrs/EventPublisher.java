@@ -8,5 +8,6 @@ import com.ondaway.poc.ddd.Event;
  */
 public interface EventPublisher {
     
-    void publish(Event event);
+    <T extends Event> void publish(T event);
+    
 }
