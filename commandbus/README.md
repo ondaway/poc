@@ -41,15 +41,15 @@ Ha sido probado con:
 
   - Levantar el servidor RabbitMQ que actua como *command bus*. Desde la raiz del proyecto:
 
-    $ docker-compose up commandbus
+    docker-compose up commandbus
 
   - Ejecutar el *command handler*: desde la raiz del proyecto:
 
-    $ java -jar java-command-handler/target/handler-0.1.0-SNAPSHOT.jar
+    java -jar java-command-handler/target/handler-0.1.0-SNAPSHOT.jar
 
   - Ejecutar el *command publisher*. Desde el directorio del proyecto:
 
-    $ publisher
+    publisher
 
 
 
