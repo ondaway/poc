@@ -10,11 +10,11 @@ Command Bus PoC
 
 ## Diagrama de arquitectura
 
-     --------          --------- -----------                                                        ----------- --------------
-    |  POST  L        |  REST   |   Command   |             --------------------------             |  Command  |  Bounded     >
-    |  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()       Command bus       )--(amqp)--> |  Handler  |  Context    <
-    | command |       |  point  |             |             --------------------------             |           |  Aggregate   >
-     ---------         --------- -----------                                                        ----------- --------------
+     --------          --------- -----------                                                        ----------- --------------     
+    |  POST  L        |  REST   |   Command   |             --------------------------             |  Command  |  Bounded     >    
+    |  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()       Command bus       )--(amqp)--> |  Handler  |  Context    <     
+    | command |       |  point  |             |             --------------------------             |           |  Aggregate   >    
+     ---------         --------- -----------                                                        ----------- --------------     
                        [Publisher]                           [queue name: task_queue]                [Worker]
 
 
