@@ -1,10 +1,11 @@
 package com.ondaway.poc.vehicle;
 
+import static com.ondaway.poc.bdd.SingleAggregateScenario.SCENARIO;
 import static org.junit.Assert.*;
 
 import com.ondaway.poc.ddd.Event;
 import com.ondaway.poc.vehicle.event.Activated;
-import com.ondaway.poc.vehicle.event.LocationChanged;
+import com.ondaway.poc.vehicle.event.Moved;
 
 import java.util.List;
 import org.junit.Before;
@@ -29,49 +30,40 @@ public class VehicleTest {
     @Test
     public void activateVehicleTest() throws Exception {
         
-        // When
-        vehicle.activate();
-        
-        // Then
-        List<Event> events = vehicle.getPendingEvents();
-        assertTrue(events.size() == 1);
-        assertTrue(events.get(0).equals(new Activated(vehicle.id)));
+        Activated activated = new Activated(vehicle.id);
+        SCENARIO()
+                .Given(vehicle)
+                .When((Vehicle v) -> { v.activate(); })
+                .Then(vehicle).shouldBe(activated);
     }
 
     @Test( expected = IllegalStateException.class)
     public void activateActiveVehicle() throws Exception {
 
-        // Given
-        vehicle.mutate(new Activated(vehicle.id));
-        
-        //When
-        vehicle.activate();
-        
-        // Should throw IllegalStateException
+        Activated activated = new Activated(vehicle.id);
+        SCENARIO()
+                .Given(vehicle).was(activated)
+                .When((Vehicle v) -> { v.activate();}); // Should throw IllegalStateException
     }
     
     @Test(expected = IllegalStateException.class)
     public void moveInactiveVehicleTest() throws Exception {
         
         // When
-        vehicle.changeLocation(1f, 1f);
-        
-        // Should throw IllegalStateException
+        vehicle.move(1f, 1f); // Should throw IllegalStateException
     }
 
     @Test
     public void moveActiveVehicleTest() throws Exception {
         
-        // Given
-        vehicle.mutate(new Activated(vehicle.id));
+        Activated activated = new Activated(vehicle.id);
+        Moved moved = new Moved(vehicle.id, 1f, 1f);
+        
+        SCENARIO()
+                .Given(vehicle).was(activated)
+                .When((Vehicle v) -> { v.move(1f,1f);})
+                .Then(vehicle).shouldBe(moved);
 
-        // When
-        vehicle.changeLocation(1f, 1f);
-
-        // Then
-        List<Event> events = vehicle.getPendingEvents();
-        assertTrue(events.size() == 2);
-        assertTrue(events.get(1).equals(new LocationChanged(vehicle.id,1f,1f)));
     }
 
 }
