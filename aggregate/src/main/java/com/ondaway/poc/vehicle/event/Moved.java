@@ -10,14 +10,14 @@ import java.util.UUID;
  *
  * @author ernesto
  */
-public class LocationChanged implements Event {
+public class Moved implements Event {
     
     public final UUID id;
     public final Float x;
     public final Float y;
     public final long timestamp;
 
-    public LocationChanged(UUID id, Float x, Float y) {
+    public Moved(UUID id, Float x, Float y) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -38,7 +38,7 @@ public class LocationChanged implements Event {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final LocationChanged other = (LocationChanged) obj;
+        final Moved other = (Moved) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
