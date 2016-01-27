@@ -9,6 +9,5 @@ import java.util.function.Consumer;
 public interface Bus extends CommandSender, EventPublisher {
 
     <T> void registerHandler(String id, Consumer<T> handler);
-    
-
+   
 }

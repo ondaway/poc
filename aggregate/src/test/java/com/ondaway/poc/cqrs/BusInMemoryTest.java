@@ -11,7 +11,7 @@ import org.junit.Test;
  *
  * @author ernesto
  */
-public class BusInMemoryTest {
+public class BusInMemoryTest implements CommandSender {
 
     Bus bus = new InMemorySynchroBus();
     VehicleCommandHandlers vehicleCommandHandlers = new VehicleCommandHandlers((null));
@@ -23,4 +23,9 @@ public class BusInMemoryTest {
         Assert.assertTrue(true); //TODO
     }
 
+
+    @Override
+    public void send(Command command) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
