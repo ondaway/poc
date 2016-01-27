@@ -1,19 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ondaway.poc.bdd;
 
 import com.ondaway.poc.ddd.AggregateRoot;
+import com.ondaway.poc.ddd.Repository;
 import java.util.UUID;
 
 /**
  *
  * @author ernesto
  */
-public class World {
+public class World<T extends AggregateRoot> {
 
+    
+    Repository<T> repository;
+    
+    public World(Repository<T> repository) {
+        this.repository = repository;
+    }
+    
     AggregateRoot find(UUID id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

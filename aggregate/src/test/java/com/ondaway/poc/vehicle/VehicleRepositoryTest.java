@@ -38,7 +38,7 @@ public class VehicleRepositoryTest {
 
         // Then
         assertEquals(1, store.length());
-        assertEquals(2, store.getEventsFor(vehicle.id).size());
+        assertEquals(3, store.getEventsFor(vehicle.id).size());
     }
 
     @Test

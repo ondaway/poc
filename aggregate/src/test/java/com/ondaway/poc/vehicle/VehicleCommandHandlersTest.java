@@ -32,7 +32,7 @@ public class VehicleCommandHandlersTest {
         vehicle = new Vehicle();
         vehicles.Save(vehicle);
         
-        world = new World();
+        world = new World(vehicles);
     }
 
     @Test
