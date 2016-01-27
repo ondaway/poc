@@ -1,16 +1,25 @@
 package main
 
 import (
-	//	"encoding/json"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	//	"os"
-	//	"strings"
-	"encoding/json"
 
 	"github.com/streadway/amqp"
 )
+
+// Command bus
+const COMMAND_BUS_URL = "amqp://guest:guest@localhost:5672/"
+const QUEUE_NAME = "task_queue"
+const QUEUE_DURABLE = true
+const QUEUE_DELETE_WHEN_USED = false
+const QUEUE_EXCLUSIVE = false
+const QUEUE_NO_WAIT = false
+
+// "REST" listener
+const LISTENER_PORT = ":8082"
+const LISTENER_URI = "/vehicles/status"
 
 type ReportStatus struct {
 	Vehicle   string  `json:"vehicle"`
@@ -19,10 +28,29 @@ type ReportStatus struct {
 	Longitude float64 `json:"lng"`
 }
 
-var (
+type CommandPublisher struct {
 	channel amqp.Channel
-	queue amqp.Queue
-)
+	queue   amqp.Queue
+}
+
+var commandPublisher CommandPublisher
+
+func (publisher *CommandPublisher) publish(status ReportStatus) error {
+	message, err := json.Marshal(status)
+	if err != nil {
+		return err
+	}
+	return publisher.channel.Publish(
+		"",                   // exchange
+		publisher.queue.Name, // routing key
+		false,                // mandatory
+		false,
+		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
+			ContentType:  "text/plain",
+			Body:         message,
+		})
+}
 
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -31,67 +59,42 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func sendCommand(status ReportStatus) error {
-	message, err := json.Marshal(status)
-	if err != nil {
-		return err
-	}
-	err = channel.Publish(
-		"",     // exchange
-		queue.Name, // routing key
-		false,  // mandatory
-		false,
-		amqp.Publishing{
-			DeliveryMode: amqp.Persistent,
-			ContentType:  "text/plain",
-			Body:         message,
-		})
-	return err
-}
-
-
 func vehiclesStatusHandler(w http.ResponseWriter, r *http.Request) {
 	// POST /vehicles/{id}/status
 	status := &ReportStatus{
-		Vehicle: "44e128a5-ac7a-4c9a-be4c-224b6bf81b20", 
-		Active: true,
-		Latitude: -34.397,
+		Vehicle:   "44e128a5-ac7a-4c9a-be4c-224b6bf81b20",
+		Active:    true,
+		Latitude:  -34.397,
 		Longitude: 150.644,
 	}
 
-	err := sendCommand(*status)
+	err := commandPublisher.publish(*status)
 	if err != nil {
 		log.Printf(" error publishing message. %s", err)
 		w.WriteHeader(500) // TODO change it
-		return 
+		return
 	}
 
 	log.Printf(" [x] Sent %s", status)
 	w.WriteHeader(http.StatusAccepted)
 }
 
-
 func main() {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial(COMMAND_BUS_URL)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
-	channel, err := conn.Channel()
+	c, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
-	defer channel.Close()
+	defer c.Close()
 
-	queue, err := channel.QueueDeclare(
-		"task_queue", // name
-		true,         // durable
-		false,        // delete when unused
-		false,        // exclusive
-		false,        // no-wait
-		nil,          // arguments
-	)
+	q, err := c.QueueDeclare(QUEUE_NAME, QUEUE_DURABLE, QUEUE_DELETE_WHEN_USED, QUEUE_EXCLUSIVE, QUEUE_NO_WAIT, nil)
 	failOnError(err, "Failed to declare a queue")
-	
+
+	commandPublisher = CommandPublisher{*c, q}
+
 	// prepare rest entry point
-	http.HandleFunc("/vehicles/status", vehiclesStatusHandler)
+	http.HandleFunc(LISTENER_URI, vehiclesStatusHandler)
 	log.Println("Listening...")
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(http.ListenAndServe(LISTENER_PORT, nil))
 }
