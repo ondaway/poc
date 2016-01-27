@@ -35,6 +35,22 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.ondaway.poc.commandbus.handler.CommandHandler</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <!-- Project information -->
     <description>OnDaWay commandBus PoC Java handler</description>
     <url>https://github.com/ondaway/poc/commandbus/javahandler</url>
