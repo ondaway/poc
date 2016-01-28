@@ -5,21 +5,27 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/streadway/amqp"
 )
 
-// Command bus
-const COMMAND_BUS_URL = "amqp://guest:guest@localhost:5672/"
-const QUEUE_NAME = "task_queue"
-const QUEUE_DURABLE = true
-const QUEUE_DELETE_WHEN_USED = false
-const QUEUE_EXCLUSIVE = false
-const QUEUE_NO_WAIT = false
+// Environment variable names
+const COMMNAND_BUS_URL_ENV = "command_bus"
+const QUEUE_NAME_ENV = "queue_name"
+const LISTENER_PORT_ENV = "listener_port"
 
-// "REST" listener
-const LISTENER_PORT = ":8082"
-const LISTENER_URI = "/vehicles/status"
+// Environment variable default values
+const COMMNAND_BUS_URL_DEFAULT = "amqp://guest:guest@localhost:5672/"
+const QUEUE_NAME_DEFAULT = "task_queue"
+const LISTENER_PORT_DEFAULT = ":8080"
+
+const LISTENER_URI string = "/vehicles/status"
+
+type CommandPublisher struct {
+	channel amqp.Channel
+	queue   amqp.Queue
+}
 
 type ReportStatus struct {
 	Vehicle   string  `json:"vehicle"`
@@ -28,10 +34,14 @@ type ReportStatus struct {
 	Longitude float64 `json:"lng"`
 }
 
-type CommandPublisher struct {
-	channel amqp.Channel
-	queue   amqp.Queue
-}
+// Config data
+var commandBusUrl string = COMMNAND_BUS_URL_DEFAULT
+var queueName string = QUEUE_NAME_DEFAULT
+var queueDurable bool = true
+var queueDeleteWhenUsed bool = false
+var queueExclusive bool = false
+var queueNoWait bool = false
+var listenerPort string = LISTENER_PORT_DEFAULT
 
 var commandPublisher CommandPublisher
 
@@ -79,8 +89,22 @@ func vehiclesStatusHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 }
 
+func processEnv() {
+	if val, exist := os.LookupEnv(COMMNAND_BUS_URL_ENV); exist {
+		commandBusUrl = val
+	}
+	if val, exist := os.LookupEnv(QUEUE_NAME_ENV); exist {
+		queueName = val
+	}
+	if val, exist := os.LookupEnv(LISTENER_PORT_ENV); exist {
+		listenerPort = val
+	}
+}
+
 func main() {
-	conn, err := amqp.Dial(COMMAND_BUS_URL)
+	processEnv()
+
+	conn, err := amqp.Dial(commandBusUrl)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
@@ -88,13 +112,13 @@ func main() {
 	failOnError(err, "Failed to open a channel")
 	defer c.Close()
 
-	q, err := c.QueueDeclare(QUEUE_NAME, QUEUE_DURABLE, QUEUE_DELETE_WHEN_USED, QUEUE_EXCLUSIVE, QUEUE_NO_WAIT, nil)
+	q, err := c.QueueDeclare(queueName, queueDurable, queueDeleteWhenUsed, queueExclusive, queueNoWait, nil)
 	failOnError(err, "Failed to declare a queue")
 
 	commandPublisher = CommandPublisher{*c, q}
 
 	// prepare rest entry point
 	http.HandleFunc(LISTENER_URI, vehiclesStatusHandler)
-	log.Println("Listening...")
-	log.Fatal(http.ListenAndServe(LISTENER_PORT, nil))
+	log.Println("Listening on port " + listenerPort + "...")
+	log.Fatal(http.ListenAndServe(listenerPort, nil))
 }
