@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  *
  * @author ernesto
  */
-public class InMemorySynchroBus implements Bus {
+public class BusInMemory implements Bus {
     
     Map<String, Consumer> handlers = new HashMap();
     

@@ -27,6 +27,7 @@ public class VehicleTest {
     public void activateVehicleTest() throws Exception {
 
         Activated activated = new Activated(vehicle.id);
+        
         SCENARIO("activate vehicle")
                 .Given(vehicle)
                 .When((Vehicle v) -> {
@@ -39,6 +40,7 @@ public class VehicleTest {
     public void activateActiveVehicle() throws Exception {
 
         Activated activated = new Activated(vehicle.id);
+        
         SCENARIO("activate activated vehicle")
                 .Given(vehicle).was(activated)
                 .When((Vehicle v) -> {
@@ -48,7 +50,6 @@ public class VehicleTest {
 
     @Test(expected = IllegalStateException.class)
     public void moveInactiveVehicleTest() throws Exception {
-
         // When
         vehicle.move(1f, 1f); // Should throw IllegalStateException
     }
@@ -60,8 +61,7 @@ public class VehicleTest {
         Moved moved = new Moved(vehicle.id, 1f, 1f);
 
         SCENARIO("move active vehicle")
-                .Given(vehicle)
-                    .was(activated)
+                .Given(vehicle).was(activated)
                 .When((Vehicle v) -> { v.move(1f, 1f); })
                 .Then(vehicle)
                     .shouldBe(moved)
