@@ -33,6 +33,10 @@ Ha sido probado con:
 // TODO (describir el proceso de construcción)
 
 
+Contruir en contenedor del publisher
+
+    $ docker build -t ondaway/publisher
+
 # Como ejecutar
 
 ## Por separado
