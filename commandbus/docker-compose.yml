@@ -1,11 +1,21 @@
 
 commandbus:
   image : rabbitmq:3
-  container_name: commandbus
-  hostname: commandbus
-  ports:
-    - "5672:5672"
-    - "15672:15672"
+#  ports:
+#    - "5672:5672"
+#    - "15672:15672"
   expose:
+    - "5672"
+    - "15672"
     - "4369"
     - "25672"
+
+publisher:
+  image : ondaway/publisher
+  ports:
+    - "8080:8080"
+  environment:
+    command_bus: "amqp://guest:guest@commandbus:5672/"
+  links:
+    - commandbus
+
