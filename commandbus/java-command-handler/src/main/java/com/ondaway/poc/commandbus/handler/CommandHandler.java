@@ -1,10 +1,11 @@
 package com.ondaway.poc.commandbus.handler;
 
+import com.ondaway.poc.commandbus.command.ReportStatus;
+import com.ondaway.poc.commandbus.command.ReportStatusDeserializer;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.ondaway.poc.commandbus.command.ReportStatus;
-import com.ondaway.poc.commandbus.command.ReportStatusDeserializer;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -12,6 +13,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +28,6 @@ public class CommandHandler {
         SimpleModule module = new SimpleModule();
         module.addDeserializer(ReportStatus.class, new ReportStatusDeserializer());
         REPORT_STATUS_CMD_MAPPER.registerModule(module);
-
     }
     
     public static void main(String[] argv) throws Exception {

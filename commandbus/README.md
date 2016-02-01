@@ -32,10 +32,13 @@ Ha sido probado con:
 
 // TODO (describir el proceso de construcción)
 
+Construir en publicador 
+
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o publisher .
 
 Contruir en contenedor del publisher
 
-    $ docker build -t ondaway/publisher
+    $ docker build -t ondaway/publisher .
 
 # Como ejecutar
 
