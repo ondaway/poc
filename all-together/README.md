@@ -5,22 +5,22 @@ OnDaWay all together now
 
 ## Architecture diagram
 
-     --------          --------- -------------                                                      ----------- --------------           
-    |  POST  L        |  REST   |   Command   |             --------------------------             |  Command  |  Bounded     >          
-    |  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()  CommandBus [RabbitMQ]  )--(amqp)--> |  Handler  |  Context    <           
-    | command |       |  point  |             |             --------------------------             |           |  Aggregate   >          
-     ---------         --------- -------------                                                      ----------- --------------           
-                                                                                                                  |            _______   
-                                                                                                                (amqp)        /       \  
-                                                                                                                  |--------> |\_______/| 
-                                                                                                                  |          |  Event  | 
-                                                                                 ------------------------         |          |  Store  | 
-    -----------                                  ___________                    ()  EventBus [rabbitmq]  )<-------            \_______/  
-   |  GraphQL  L       -------------------      |___________|                    ------------------------                                
-   |   JSON     |     |   GraphQL Schema  |<----|   View    |                                |                                           
-   |  response  |      -------------------      |  [Redis]  | <-------------------------------                                           
-    ------------                                |___________|                                                                            
-                                                                                                                                         
+     --------          --------- -------------                                                      ----------- --------------            
+    |  POST  L        |  REST   |   Command   |             --------------------------             |  Command  |  Bounded     >           
+    |  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()  CommandBus [RabbitMQ]  )--(amqp)--> |  Handler  |  Context    <            
+    | command |       |  point  |             |             --------------------------             |           |  Aggregate   >           
+     ---------         --------- -------------                                                      ----------- --------------            
+                                                                                                                  |            _______    
+                                                                                                                (amqp)        /       \   
+                                                                                                                  |--------> |\_______/|  
+                                                                                                                  |          |  Event  |  
+                                                                                 ------------------------         |          |  Store  |  
+    -----------                                  ___________                    ()  EventBus [rabbitmq]  )<-------            \_______/   
+   |  GraphQL  L       -------------------      |___________|                    ------------------------                                 
+   |   JSON     |     |   GraphQL Schema  |<----|   View    |                                |                                            
+   |  response  |      -------------------      |  [Redis]  | <-------------------------------                                            
+    ------------                                |___________|                                                                             
+
 
 
 The infrastructure is composed of the services:
