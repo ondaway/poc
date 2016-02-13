@@ -24,7 +24,6 @@ OnDaWay all together now
 
 ## Services diagram
 
-
     Application                                                                     | Support
     ===========                                                                     | =======
          ______________          ______________          ____________               |  
@@ -54,33 +53,33 @@ The **Support layer** is composed of the services:
   - ¿Graphana/Graphite? for system monitoring.
 
 
-# Infrastructure management
+# Persistence layer management
 
 Start: 
 
-    docker-compose --file infrastructure.yml up -d
+    docker-compose --file persistence.yml up -d
 
 Status & log:
 
-    docker-compose --file infrastructure.yml log 
+    docker-compose --file persistence.yml log 
 
 Stop or kill:
 
-    docker-compose --file infrastructure.yml stop
-    docker-compose --file infrastructure.yml kill
+    docker-compose --file persistence.yml stop
+    docker-compose --file persistence.yml kill
 
 
-# RabbitMQ
+## RabbitMQ
 
-## Access admin console
+Access admin console:
 
     http://localhost:15672
     [admin/changeit]
 
 
-# Event store
+## Event store
 
-## Access admin console
+Access admin console:
 
     http://localhost:2113
     [admin/changeit]
