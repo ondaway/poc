@@ -1,0 +1,14 @@
+#elk:
+#  image: 
+#  container_name: elk
+#  environment:
+#    RABBITMQ_DEFAULT_USER: admin
+#    RABBITMQ_DEFAULT_PASS: changeit
+#  ports:
+#  expose:
+#
+#graphite:
+#  image: 
+#  container_name: graphite
+#  ports:
+#  expose:
