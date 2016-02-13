@@ -15,19 +15,43 @@ OnDaWay all together now
                                                                                                                   |--------> |\_______/|  
                                                                                                                   |          |  Event  |  
                                                                                  ------------------------         |          |  Store  |  
-    -----------                                  ___________                    ()  EventBus [rabbitmq]  )<-------            \_______/   
-   |  GraphQL  L       -------------------      |___________|                    ------------------------                                 
-   |   JSON     |     |   GraphQL Schema  |<----|   View    |                                |                                            
-   |  response  |      -------------------      |  [Redis]  | <-------------------------------                                            
-    ------------                                |___________|                                                                             
+     -----------                                  ___________                   ()  EventBus [rabbitmq]  )<-------            \_______/   
+    |  GraphQL  L       -------------------      |___________|                   ------------------------                                 
+    |   JSON     |<----|   GraphQL Schema  |<----|   View    |                               |                                            
+    |  response  |      -------------------      |  [Redis]  | <------------------------------                                            
+     ------------                                |___________|                                                                             
 
 
+## Services diagram
 
-The infrastructure is composed of the services:
+
+    Application                                                                     | Support
+    ===========                                                                     | =======
+         ______________          ______________          ____________               |  
+        |   Command    |        |    Views     |        |   Event    |              |     _____________
+        |  entrypoint  |        |  entrypoint  |        |  Handlers  |              |    |     ELK     |
+        |    <REST>    |        |  <GraphQL>   |        |            |              |    |  <logging>  |
+         --------------          --------------          ------------               |     -------------
+    ________________________________________________________________________________|
+    Persitence                                                                      |     ________________
+    ==========                                                                      |    |   ¿Graphana?   |
+         _____________      _________________      ___________      ___________     |    |  <monitoring>  |
+        |   RabbitMQ  |    |    EventStore   |    |   Redis   |    |  ¿Neo4J?  |    |     ----------------  
+        |     <bus>   |    |  <event store>  |    |  <views>  |    |   <view>  |    |
+         -------------      -----------------      -----------      -----------     |
+                                                                                    |
+
+
+The **persistence layer** is composed of the services:
 
   - [RabbitMQ](https://www.rabbitmq.com/) as buses support
   - [Event Store](https://geteventstore.com/) as event store
-  - [Redis](http://redis.io) to store views
+  - [Redis](http://redis.io) to store views. For the *views* another services can be used, as Neo4J for graph models, MongoDb for document-based data storage, or relational databases, for transactional support systems.
+
+The **Support layer** is composed of the services:
+
+  - ELK stack as logging stack.
+  - ¿Graphana/Graphite? for system monitoring.
 
 
 # Infrastructure management
