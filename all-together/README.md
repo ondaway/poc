@@ -93,21 +93,18 @@ Start, stop and other layer management:
   - [Kibana](http://localhost:5601)
 
 
-
-
 # Documentation
 
 ## Docker images
 
-    - [RabbitMQ](https://hub.docker.com/_/rabbitmq/)
-    - [Redis](https://hub.docker.com/_/redis/)
-    - [Event Store](https://hub.docker.com/r/madkom/eventstore-docker/)
-    - [Elastic Search](https://hub.docker.com/_/elasticsearch/)
-    - [Logstash](https://hub.docker.com/_/logstash/)
-    - [Kibana](https://hub.docker.com/_/kibana/)
+  - [RabbitMQ](https://hub.docker.com/_/rabbitmq/)
+  - [Event Store](https://hub.docker.com/r/madkom/eventstore-docker/)
+  - [Redis](https://hub.docker.com/_/redis/)
+  - [Elastic Search](https://hub.docker.com/_/elasticsearch/)
+  - [Logstash](https://hub.docker.com/_/logstash/)
+  - [Kibana](https://hub.docker.com/_/kibana/)
 
 
 ## APIs
 
   - [Redis Go API](https://github.com/go-redis/redis)
-
