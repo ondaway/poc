@@ -49,40 +49,50 @@ The **persistence layer** is composed of the services:
 
 The **Support layer** is composed of the services:
 
-  - ELK stack as logging stack.
-  - ¿Graphana/Graphite? for system monitoring.
+  - ELK (Elastic + Logstach + Kibana)stack as logging solution.
+  - ¿Graphana/Graphite/Prometheus? for system monitoring.
 
 
-# Persistence layer management
+# Persistence layer 
 
-Start: 
+This layer is used to store application state, data and information. 
+
+## Management
+
+Start, stop and other layer management: 
 
     docker-compose --file persistence.yml up -d
-
-Status & log:
-
-    docker-compose --file persistence.yml log 
-
-Stop or kill:
-
     docker-compose --file persistence.yml stop
     docker-compose --file persistence.yml kill
+    docker-compose --file persistence.yml ps 
+    docker-compose --file persistence.yml log 
+
+## Consoles and administration
+
+  - [RabbitMQ Console](http://localhost:15672): User: *admin*, password: *changeit*
+  - [Event store Console](http://localhost:2113): User: *admin*, password: *changeit*
 
 
-## RabbitMQ
+# Support layer 
 
-Access admin console:
+This layer contains all support services needed for application and persistence services, as logging, monitoring, configuration, etc.
 
-    http://localhost:15672
-    [admin/changeit]
+## Management
+
+Start, stop and other layer management: 
+
+    docker-compose --file support.yml up -d
+    docker-compose --file support.yml stop
+    docker-compose --file support.yml kill
+    docker-compose --file support.yml ps 
+    docker-compose --file support.yml log 
+
+## Consoles and administration
+
+  - [Elastic rest entrypoint](http://localhost:9200/) 
+  - [Kibana](http://localhost:5601)
 
 
-## Event store
-
-Access admin console:
-
-    http://localhost:2113
-    [admin/changeit]
 
 
 # Documentation
@@ -92,6 +102,9 @@ Access admin console:
     - [RabbitMQ](https://hub.docker.com/_/rabbitmq/)
     - [Redis](https://hub.docker.com/_/redis/)
     - [Event Store](https://hub.docker.com/r/madkom/eventstore-docker/)
+    - [Elastic Search](https://hub.docker.com/_/elasticsearch/)
+    - [Logstash](https://hub.docker.com/_/logstash/)
+    - [Kibana](https://hub.docker.com/_/kibana/)
 
 
 ## APIs
