@@ -12,3 +12,35 @@
 #  container_name: graphite
 #  ports:
 #  expose:
+
+# ELK stack
+elasticsearch:
+  image: elasticsearch:2.2.0
+  command: elasticsearch -Des.network.host=0.0.0.0 -Des.node.name="ElkNode1"
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  expose:
+    - "9200"
+    - "9300"
+
+logstash:
+  image: logstash:latest
+  command: logstash -f /etc/logstash/conf.d/logstash.conf
+  #volumes:
+  #  - ./logstash/config:/etc/logstash/conf.d
+  ports:
+    - "5000:5000"
+  links:
+    - elasticsearch
+
+kibana:
+  image: kibana:latest
+  #volumes:
+  #  - ./kibana/config/kibana.yml:/opt/kibana/config/kibana.yml
+  ports:
+    - "5601:5601"
+  expose:
+    - "5601"
+  links:
+    - elasticsearch
