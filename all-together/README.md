@@ -24,7 +24,7 @@ OnDaWay all together now
                                                    _________                                         |
                                                   /_________\                                        |
                                                  |   View    |     ┌─────────────────┐               |
-                                                 |  [Neo4J]  | <---|  event handler  |<----(amqp)----┘
+                                                 |  [Neo4J]  | <---│  event handler  │<----(amqp)----┘
                                                   \_________/      └─────────────────┘
 
 
@@ -33,7 +33,7 @@ OnDaWay all together now
     Application                                                                       │ Support
     ===========                                                                       │ =======
         ┌──────────────┐    ┌──────────────┐    ┌────────────┐      ┌────────────┐    │  
-        |   Commands   |    |    Views     |    |   Event    |_     |  Bounded   |_   │    ┌─────────────┐
+        |   Commands   |    |    Views     |    |   Event    |─┐    |  Bounded   |─┐  │    ┌─────────────┐
         |  entrypoint  |    |  entrypoint  |    |  Handlers  | |    |  contexts  | |  │    |     ELK     |
         |    <REST>    |    |  <GraphQL>   |    └────────────┘ |     ────────────┘ |  │    |  <logging>  |
         └──────────────┘    └──────────────┘      └────────────┘      └────────────┘  │    └─────────────┘
