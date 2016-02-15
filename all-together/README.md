@@ -5,7 +5,7 @@ OnDaWay all together now
 
 ## Architecture diagram
 
-                        {Commands entrypoint}                                                           {Bounded context}
+                         {Commands adaptor}                                                           {Bounded context}
     ┌────────         ┌─────────┬─────────────┐                                                    ┌───────────┬──────────────            
     │  POST  L        |  REST   |   Command   |             ──────────────────────────             |  Command  |  Bounded     >           
     │  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()  CommandBus [RabbitMQ]  )--(amqp)--> |  Handler  |  Context    <            
@@ -16,10 +16,10 @@ OnDaWay all together now
                                                                                                                    |       |\_______/|  
                                                                                                                    o-----> |  Event  |  
                                                     {Views}                              ──────────────────────    |       |  Store  |  
-    ┌───────────        {Views entrypoint}         _________                            () EventBus [rabbitmq] )<--┘        \_______/   
-    |  GraphQL  L      ┌───────────────────┐      /_________\       {Command handlers}   ──────────────────────                                 
+    ┌───────────         {Queries schemas}         _________                            () EventBus [rabbitmq] )<--┘        \_______/   
+    |  GraphQL  L      ┌───────────────────┐      /_________\       {Event handlers}     ──────────────────────                                 
     |   JSON     |<----|   GraphQL Schema  |<----|   View    |     ┌─────────────────┐               |
-    |  response  |     └───────────────────┘     |  [Redis]  | <---|  event handler  |<----(amqp)----┤
+    |  queries   |     └───────────────────┘     |  [Redis]  | <---|  event handler  |<----(amqp)----┤
     └────────────┘                                \_________/      └─────────────────┘               |
                                                    _________                                         |
                                                   /_________\                                        |
@@ -32,11 +32,11 @@ OnDaWay all together now
 
     Application                                                                       │ Support
     ===========                                                                       │ =======
-        ┌──────────────┐    ┌──────────────┐    ┌────────────┐      ┌────────────┐    │  
-        |   Commands   |    |    Views     |    |   Event    |─┐    |  Bounded   |─┐  │    ┌─────────────┐
-        |  entrypoint  |    |  entrypoint  |    |  Handlers  | |    |  contexts  | |  │    |     ELK     |
-        |    <REST>    |    |  <GraphQL>   |    └────────────┘ |     ────────────┘ |  │    |  <logging>  |
-        └──────────────┘    └──────────────┘      └────────────┘      └────────────┘  │    └─────────────┘
+        ┌──────────────┐    ┌─────────────┐    ┌────────────┐      ┌────────────┐     │  
+        |   Commands   |    |    Query    |    |   Event    |─┐    |  Bounded   |─┐   │    ┌─────────────┐
+        |   adaptors   |    |   schemas   |    |  Handlers  | |    |  contexts  | |   │    |     ELK     |
+        |    <REST>    |    |  <GraphQL>  |    └────────────┘ |     ────────────┘ |   │    |  <logging>  |
+        └──────────────┘    └─────────────┘      └────────────┘      └────────────┘   │    └─────────────┘
     ──────────────────────────────────────────────────────────────────────────────────┤
     Persitence                                                                        │    ┌────────────────┐
     ==========                                                                        │    |   ¿Graphana?   |
