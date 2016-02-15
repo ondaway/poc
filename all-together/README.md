@@ -6,25 +6,25 @@ OnDaWay all together now
 ## Architecture diagram
 
                          {Commands adaptor}                                                           {Bounded context}
-    ┌────────         ┌─────────┬─────────────┐                                                    ┌───────────┬──────────────            
-    │  POST  L        |  REST   |   Command   |             ──────────────────────────             |  Command  |  Bounded     >           
-    │  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()  CommandBus [RabbitMQ]  )--(amqp)--> |  Handler  |  Context    <            
-    │ command |       |  point  |             |             ──────────────────────────             |           |  Aggregate   >           
-    └─────────┘       └─────────┴─────────────┘                                                    └───────────┴──────────────            
-                                                                                                                   |         _______    
-                                                                                                                 (amqp)     /       \   
-                                                                                                                   |       |\_______/|  
-                                                                                                                   o-----> |  Event  |  
-                                                    {Views}                              ──────────────────────    |       |  Store  |  
-    ┌───────────         {Queries schemas}         _________                            () EventBus [rabbitmq] )<--┘        \_______/   
-    |  GraphQL  L      ┌───────────────────┐      /_________\       {Event handlers}     ──────────────────────                                 
-    |   JSON     |<----|   GraphQL Schema  |<----|   View    |     ┌─────────────────┐               |
-    |  queries   |     └───────────────────┘     |  [Redis]  | <---|  event handler  |<----(amqp)----┤
-    └────────────┘                                \_________/      └─────────────────┘               |
-                                                   _________                                         |
-                                                  /_________\                                        |
-                                                 |   View    |     ┌─────────────────┐               |
-                                                 |  [Neo4J]  | <---│  event handler  │<----(amqp)----┘
+    ┌────────         ┌─────────┬─────────────┐                                                    ┌───────────┬─────────────            
+    │  POST  L        │  REST   │   Command   │             ──────────────────────────             │  Command  │  Bounded    )           
+    │  JSON   ├───(o──┤  entry  │  Publisher  ├───(msg)───>()  CommandBus [RabbitMQ]  )───(msg)───>│  Handler  │  Context   (            
+    │ command │       │  point  │             │             ──────────────────────────             │           │  Aggregate  )           
+    └─────────┘       └─────────┴─────────────┘                                                    └───────────┴───┬─────────            
+                                                                                                                   │        _______    
+                                                                                                                (event)    /       \   
+                                                                                                                   │      │\_______/│  
+                                                                                                                   ├─────>│  Event  │  
+                                                    {Views}                              ──────────────────────    │      │  Store  │  
+    ┌───────────         {Queries schemas}         _________                            () EventBus [rabbitmq] )<──┘       \_______/   
+    │  GraphQL  L      ┌───────────────────┐      /_________\       {Event handlers}     ────────────┬─────────                                 
+    │   JSON     │<────┤  GraphQL Schemas  |<─┬──┤   View    │     ┌─────────────────┐               │
+    │  queries   │     └───────────────────┘  |  │  [Redis]  │ <───┤  event handler  │<───(event)────┤
+    └────────────┘                            |   \_________/      └─────────────────┘               │
+                                              |    _________                                         │
+                                              |   /_________\                                        │
+                                              └──┤   View    |     ┌─────────────────┐               │
+                                                 │  [Neo4J]  | <───┤  event handler  │<───(event)────┘
                                                   \_________/      └─────────────────┘
 
 
@@ -33,16 +33,16 @@ OnDaWay all together now
     Application                                                                       │ Support
     ===========                                                                       │ =======
         ┌──────────────┐    ┌─────────────┐    ┌────────────┐      ┌────────────┐     │  
-        |   Commands   |    |    Query    |    |   Event    |─┐    |  Bounded   |─┐   │    ┌─────────────┐
-        |   adaptors   |    |   schemas   |    |  Handlers  | |    |  contexts  | |   │    |     ELK     |
-        |    <REST>    |    |  <GraphQL>  |    └────────────┘ |     ────────────┘ |   │    |  <logging>  |
+        │   Commands   │    │    Query    │    │   Event    |─┐    │  Bounded   |─┐   │    ┌─────────────┐
+        │   adaptors   │    │   schemas   │    │  Handlers  │ │    │  contexts  | │   │    │     ELK     │
+        │    <REST>    │    │  <GraphQL>  │    └────────────┘ │    └────────────┘ │   │    │  <logging>  │
         └──────────────┘    └─────────────┘      └────────────┘      └────────────┘   │    └─────────────┘
     ──────────────────────────────────────────────────────────────────────────────────┤
     Persitence                                                                        │    ┌────────────────┐
-    ==========                                                                        │    |   ¿Graphana?   |
-        ┌─────────────┐    ┌─────────────────┐    ┌───────────┐    ┌───────────┐      │    |  ¿Prometheus?  |
-        |   RabbitMQ  |    |    EventStore   |    |  ¿Redis?  |    |  ¿Neo4J?  |      │    |  <monitoring>  |   
-        |    <bus>    |    |  <event store>  |    |  <views>  |    |   <view>  |      │    └────────────────┘
+    ==========                                                                        │    │   ¿Graphana?   │
+        ┌─────────────┐    ┌─────────────────┐    ┌───────────┐    ┌───────────┐      │    │  ¿Prometheus?  │
+        │   RabbitMQ  │    │    EventStore   │    │  ¿Redis?  │    │  ¿Neo4J?  │      │    │  <monitoring>  │   
+        │    <bus>    │    │  <event store>  │    │  <views>  │    │   <view>  │      │    └────────────────┘
         └─────────────┘    └─────────────────┘    └───────────┘    └───────────┘      │
                                                                                       │
 
