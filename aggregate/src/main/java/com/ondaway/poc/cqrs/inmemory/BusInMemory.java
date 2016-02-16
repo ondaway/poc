@@ -17,7 +17,7 @@ public class BusInMemory implements Bus {
     
     @Override
     public <T> void registerHandler(String name, Consumer<T> handler) {
-        // TODO: obtain command class name from T makes commandName parameter unnecesary.
+        // TODO: obtain command class name from T makes 'name' parameter unnecesary.
         // TODO: is it possible ?? JavaGenerics Erasure could be a problem !?
         handlers.put(name, handler);
     }
