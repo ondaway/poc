@@ -28,6 +28,7 @@ public class EventStoreInMemory implements EventStore {
         } else {
             streams.put(id, events);
         }
+        events.stream().forEach( event -> publisher.publish(event));
     }
 
     @Override

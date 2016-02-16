@@ -22,13 +22,11 @@ public class BusInMemory implements Bus {
         handlers.put(name, handler);
     }
 
-    @Override
     public <T extends Command> void send(T command) {
         Consumer<T> handler = handlers.get(command.getClass().getName());
         handler.accept(command);
     }
 
-    @Override
     public <T extends Event> void publish(T event) {
         Consumer<T> handler = handlers.get(event.getClass().getName());
         handler.accept(event);
