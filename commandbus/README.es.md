@@ -1,27 +1,26 @@
 Command Bus PoC
 ===============
 
-Decoupled command bus implemented with RabbitMQ proof of concept. 
+*Proof of Concept* de un sistema de command bus desacoplado.
 
 
-# Goals
+# Objetivos
 
 // TODO Hablar de los tres obnjetivos de la prueba (arquitectónico, poliglotismo , orquestación de la solución)
 
-## Architecture diagram
+## Diagrama de arquitectura
 
-     --------          --------- -------------                                                      ----------- --------------     
+     --------          --------- -----------                                                        ----------- --------------     
     |  POST  L        |  REST   |   Command   |             --------------------------             |  Command  |  Bounded     >    
     |  JSON   |---(o--|  entry  |  Publisher  |--(amqp)--> ()       Command bus       )--(amqp)--> |  Handler  |  Context    <     
     | command |       |  point  |             |             --------------------------             |           |  Aggregate   >    
-     ---------         --------- -------------                                                      ----------- --------------     
+     ---------         --------- -----------                                                        ----------- --------------     
                        [Publisher]                           [queue name: task_queue]                [Worker]
 
 
-# Requirements
+# Requisitos
 
-Has ben developed with:
-
+Ha sido probado con:
   - Java 8 JDK 
   - Maven 3.2.1
   - Go 1.5.1
@@ -29,19 +28,19 @@ Has ben developed with:
   - Docker compose 1.5.1
 
 
-# Building
+# Como construir
 
 // TODO (describir el proceso de construcción)
 
-## Building the publisher
+Construir en publicador 
 
-    $ CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o publisher .
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o publisher .
 
 Contruir en contenedor del publisher
 
     $ docker build -t ondaway/publisher .
 
-# Run
+# Como ejecutar
 
 ## Por separado
 
@@ -61,45 +60,35 @@ Ejecutar el *command publisher*. Desde el directorio del proyecto:
     $ publisher
 
 
-## Orchestrate with docker-compose
+## Orquestación
 
     $ docker-compose up
 
 
-## Testing
+## Probar
 
-Once all sistems are up and running, to test behavour will send a JSON StatusReport message to publisher. For example, with curl:
+Ejemplo de como realizar la petición POST con *curl* y unos datos de prueba.
 
     $ curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" -d @sample_command.json http://localhost:8080/vehicle/{id}/status
-
 
 //TODO (describir como verificar que la prueba ha funcionado. Básicamente es mirar la consola del proceso Java)
 
 
-# Command message format
+# Formato del comando
 
-The command used in the poc will be **ReportStatus**, which notifies the vehicle status. The format is JSON, wiht the syntax:
-
-    {
-      "vehicle": <vehicle_id>,
-      "active": <active_status>,
-      "lat": <latitude>, 
-      "lng": <longitude>
-    }
-
-Fields description:
-
-  - *vechicle*: Vehicle identifier. Format: UUID (pendiente de estudio).
-  - *active*: Active status. Boolean.
-  - *lat*: Latitude. Double.
-  - *lng*: Longitud. Double.
-
-Example:
+El comando que se va a implementar de ejemplo es **ReportStatus**, para notificar el estado
+de un vehículo. Será un JSON con en siguiente formato:
 
     {
-      "vehicle": "44e128a5-ac7a-4c9a-be4c-224b6bf81b20",
-      "active": true,
-      "lat": -34.397, 
-      "lng": 150.644
+    	"vehicle": "44e128a5-ac7a-4c9a-be4c-224b6bf81b20",
+    	"active": true,
+    	"lat": -34.397, 
+    	"lng": 150.644
     }
 
+Descripción de los campos:
+
+  - *vechicle*: identificador del vehículo. Formato UUID (pendiente de estudio).
+  - *active*: flag indicador de si el vehículo está activo o no
+  - *lat*: Latitud
+  - *lng*: Longitud
