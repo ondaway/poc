@@ -1,5 +1,6 @@
 package com.ondaway.poc.cqrs.inmemory;
 
+import com.ondaway.poc.cqrs.Bus;
 import com.ondaway.poc.cqrs.EventPublisher;
 import com.ondaway.poc.cqrs.EventStore;
 import com.ondaway.poc.ddd.Event;
@@ -12,13 +13,13 @@ import java.util.UUID;
  *
  * @author jeroldan
  */
-public class EventStoreInMemory implements EventStore {
+public class EventStoreInMemory implements EventStore, EventPublisher {
 
     Map<UUID, List<Event>> streams = new HashMap();
-    EventPublisher publisher;
+    Bus bus;
     
-    public EventStoreInMemory(EventPublisher publisher) {
-        this.publisher = publisher;
+    public EventStoreInMemory(Bus bus) {
+        this.bus = bus;
     }
     
     @Override
@@ -28,7 +29,7 @@ public class EventStoreInMemory implements EventStore {
         } else {
             streams.put(id, events);
         }
-        events.stream().forEach( event -> publisher.publish(event));
+        events.stream().forEach( event -> publish(event));
     }
 
     @Override
@@ -41,6 +42,11 @@ public class EventStoreInMemory implements EventStore {
     @Override
     public int length() {
         return streams.size();
+    }
+
+    @Override
+    public <T extends Event> void publish(T event) {
+        //this.bus.send(event);
     }
     
 }

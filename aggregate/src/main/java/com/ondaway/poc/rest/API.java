@@ -1,8 +1,6 @@
 package com.ondaway.poc.rest;
 
-import com.google.gson.Gson;
 import com.ondaway.poc.cqrs.Bus;
-import com.ondaway.poc.cqrs.inmemory.BusInMemory;
 import com.ondaway.poc.vehicle.command.ReportStatus;
 import java.util.UUID;
 import static spark.Spark.*;
@@ -13,11 +11,13 @@ import static spark.Spark.*;
  */
 public class API {
 
-    public static void main(String[] args) {
+    private final Bus bus;
 
-        Bus bus = new BusInMemory();
+    public API(Bus bus) {
+        this.bus = bus;
+    }
 
-        Gson gson = new Gson();
+    public void listen() {
 
         get("/ondaway", (req, res) -> "OndaWay up and running...");
 
