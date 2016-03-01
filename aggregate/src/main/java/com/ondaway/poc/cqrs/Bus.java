@@ -8,6 +8,6 @@ import java.util.function.Consumer;
  */
 public interface Bus extends CommandSender {
 
-    <T> void registerHandler(String id, Consumer<T> handler);
-   
+    <T> void registerHandler(String messageName, Consumer<T> handler);
+    
 }

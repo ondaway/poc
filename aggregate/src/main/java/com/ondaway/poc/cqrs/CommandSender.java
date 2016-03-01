@@ -6,6 +6,12 @@ package com.ondaway.poc.cqrs;
  */
 public interface CommandSender {
 
-    public <T extends Command> void send(T command);
+    /**
+     * 
+     * @param <T>
+     * @param command
+     * @throws InvalidCommandException 
+     */
+    <T extends Command> void emit(T command) throws InvalidCommandException;
     
 }

@@ -1,12 +1,9 @@
-package com.ondaway.poc.cqrs.stack;
+package com.ondaway.poc.cqrs.bus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ondaway.poc.commandbus.command.ReportStatus;
 import com.ondaway.poc.commandbus.command.ReportStatusDeserializer;
-import com.ondaway.poc.cqrs.Bus;
-import com.ondaway.poc.cqrs.Command;
-import com.ondaway.poc.ddd.Event;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -14,10 +11,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
 
 /**
  *

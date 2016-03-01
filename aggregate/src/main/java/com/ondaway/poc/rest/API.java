@@ -1,8 +1,12 @@
 package com.ondaway.poc.rest;
 
-import com.ondaway.poc.cqrs.Bus;
+import com.ondaway.poc.cqrs.Command;
+import com.ondaway.poc.cqrs.CommandSender;
+import com.ondaway.poc.cqrs.InvalidCommandException;
+import com.ondaway.poc.vehicle.command.Register;
 import com.ondaway.poc.vehicle.command.ReportStatus;
 import java.util.UUID;
+import spark.Response;
 import static spark.Spark.*;
 
 /**
@@ -11,9 +15,9 @@ import static spark.Spark.*;
  */
 public class API {
 
-    private final Bus bus;
+    private final CommandSender bus;
 
-    public API(Bus bus) {
+    public API(CommandSender bus) {
         this.bus = bus;
     }
 
@@ -21,9 +25,24 @@ public class API {
 
         get("/ondaway", (req, res) -> "OndaWay up and running...");
 
-        put("/ondaway/vehicle/:id/status", (req, res) -> {
-            bus.send(new ReportStatus(UUID.randomUUID(), true, 1f, 1f));
-            return "vehicle [" + req.params(":id") + "]: new status received.";
+        post("/ondaway/vehicles", (req, res) -> {
+            return _processCommand(new Register(UUID.randomUUID()), res);
+        });
+
+        put("/ondaway/vehicles/:id/status", (req, res) -> {
+            return _processCommand(new ReportStatus(UUID.randomUUID(), true, 1f, 1f), res);
         });
     }
+
+    private String _processCommand(Command command, Response response) {
+        try {
+            bus.emit(command);
+            response.status(202);
+            return "Operation in progress";
+        } catch (InvalidCommandException ex) {
+            response.status(500);
+            return ex.getMessage();
+        }
+    }
+
 }

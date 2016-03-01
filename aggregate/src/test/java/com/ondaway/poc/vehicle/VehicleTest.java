@@ -64,8 +64,7 @@ public class VehicleTest {
                 .Given(vehicle).was(activated)
                 .When((Vehicle v) -> { v.move(1f, 1f); })
                 .Then(vehicle)
-                    .shouldBe(moved)
-                    .shouldFulFill((Vehicle) -> { return true; });
+                    .shouldBe(moved);
     }
 
 }

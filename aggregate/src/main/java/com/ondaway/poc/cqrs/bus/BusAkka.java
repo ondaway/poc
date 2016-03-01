@@ -1,4 +1,4 @@
-package com.ondaway.poc.cqrs.stack;
+package com.ondaway.poc.cqrs.bus;
 
 import akka.actor.ActorSystem;
 import akka.actor.ActorSystemImpl;

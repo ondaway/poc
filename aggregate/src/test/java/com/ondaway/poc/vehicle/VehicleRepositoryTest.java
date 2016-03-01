@@ -2,7 +2,7 @@ package com.ondaway.poc.vehicle;
 
 import com.ondaway.poc.cqrs.EventRepository;
 import com.ondaway.poc.cqrs.EventStore;
-import com.ondaway.poc.cqrs.inmemory.EventStoreInMemory;
+import com.ondaway.poc.cqrs.eventstore.EventStoreInMemory;
 import com.ondaway.poc.vehicle.event.Activated;
 import com.ondaway.poc.vehicle.event.Moved;
 import static org.junit.Assert.*;

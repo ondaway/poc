@@ -1,4 +1,4 @@
-package com.ondaway.poc.cqrs.inmemory;
+package com.ondaway.poc.cqrs.eventstore;
 
 import com.ondaway.poc.cqrs.Bus;
 import com.ondaway.poc.cqrs.EventPublisher;
