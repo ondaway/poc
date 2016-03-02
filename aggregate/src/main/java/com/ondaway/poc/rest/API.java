@@ -25,11 +25,11 @@ public class API {
 
         get("/ondaway", (req, res) -> "OndaWay up and running...");
 
-        post("/ondaway/vehicles", (req, res) -> {
+        get("/ondaway/vehicles", (req, res) -> {
             return _processCommand(new Register(UUID.randomUUID()), res);
         });
 
-        put("/ondaway/vehicles/:id/status", (req, res) -> {
+        get("/ondaway/vehicles/:id/status", (req, res) -> {
             return _processCommand(new ReportStatus(UUID.randomUUID(), true, 1f, 1f), res);
         });
     }
@@ -41,8 +41,7 @@ public class API {
             return "Operation in progress";
         } catch (InvalidCommandException ex) {
             response.status(500);
-            return ex.getMessage();
+            return "ERROR";
         }
     }
-
 }

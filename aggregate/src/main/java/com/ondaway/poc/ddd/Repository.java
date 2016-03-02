@@ -10,8 +10,8 @@ import java.util.UUID;
  */
 public interface Repository<T extends AggregateRoot> {
     
-    void Save(AggregateRoot aggregate);
+    void save(AggregateRoot aggregate);
  
-    Optional<T> GetById(UUID id, Class clazz);
+    Optional<T> getById(UUID id, Class clazz);
  
 }

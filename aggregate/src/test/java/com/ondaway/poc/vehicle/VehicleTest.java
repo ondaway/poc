@@ -3,6 +3,7 @@ package com.ondaway.poc.vehicle;
 import static com.ondaway.poc.bdd.SingleAggregateScenario.SCENARIO;
 import com.ondaway.poc.vehicle.event.Activated;
 import com.ondaway.poc.vehicle.event.Moved;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,9 +21,9 @@ public class VehicleTest {
 
     @Before
     public void setUp() {
-        vehicle = new Vehicle();
+        vehicle = new Vehicle(UUID.randomUUID());
     }
-
+    
     @Test
     public void activateVehicleTest() throws Exception {
 

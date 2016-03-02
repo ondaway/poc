@@ -18,7 +18,7 @@ import org.reflections.scanners.MethodParameterScanner;
  */
 public class AggregateRoot {
     
-    public final UUID id = UUID.randomUUID();
+    public UUID id = UUID.randomUUID();
     
     private final List<Event> pendingEvents;
 

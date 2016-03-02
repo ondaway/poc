@@ -1,10 +1,10 @@
 package com.ondaway.poc.vehicle;
 
-
 import com.ondaway.poc.ddd.AggregateRoot;
 import com.ondaway.poc.vehicle.event.Activated;
 import com.ondaway.poc.vehicle.event.Created;
 import com.ondaway.poc.vehicle.event.Moved;
+import java.util.UUID;
 
 /**
  *
@@ -14,8 +14,10 @@ public class Vehicle extends AggregateRoot {
 
     boolean active = false;
 
-    public Vehicle() {
-        mutate(new Created());
+    public Vehicle() {}
+    
+    public Vehicle(UUID id) {
+        mutate(new Created(id));
     }
     
     public void activate() {
@@ -32,7 +34,10 @@ public class Vehicle extends AggregateRoot {
         mutate(new Moved(this.id, x, y));
     }
     
-    // TODO: should be private but reflections needs this to be public in order to invoke it
+    public void apply(Created event) {
+        this.id = event.id;
+    }
+    
     public void apply(Activated event) {
         this.active = true;
     }

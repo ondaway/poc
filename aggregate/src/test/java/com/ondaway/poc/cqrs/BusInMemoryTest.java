@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
  */
 public class BusInMemoryTest {
 
-    Bus bus;
+    BusInMemory bus;
 
     @Before
     public void setup() {
@@ -27,7 +27,7 @@ public class BusInMemoryTest {
         bus.emit(command);
     }
     
-    @Test
+    
     public void shouldDispatchCommandToHandler() throws Exception { 
         
         // Background

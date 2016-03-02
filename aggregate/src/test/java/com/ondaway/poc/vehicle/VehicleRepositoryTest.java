@@ -5,6 +5,7 @@ import com.ondaway.poc.cqrs.EventStore;
 import com.ondaway.poc.cqrs.eventstore.EventStoreInMemory;
 import com.ondaway.poc.vehicle.event.Activated;
 import com.ondaway.poc.vehicle.event.Moved;
+import java.util.UUID;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class VehicleRepositoryTest {
     public void setup() {
         store = new EventStoreInMemory(null);
         repository = new EventRepository(store);
-        vehicle = new Vehicle();
+        vehicle = new Vehicle(UUID.randomUUID());
     }
 
     @Test
@@ -34,7 +35,7 @@ public class VehicleRepositoryTest {
         vehicle.mutate(new Moved(vehicle.id, 1f, 1f));
 
         // When
-        repository.Save(vehicle);
+        repository.save(vehicle);
 
         // Then
         assertEquals(1, store.length());
@@ -47,7 +48,7 @@ public class VehicleRepositoryTest {
         //Given
         saveVehicleTest();
 
-        Vehicle v = repository.GetById(vehicle.id, Vehicle.class).get();
+        Vehicle v = repository.getById(vehicle.id, Vehicle.class).get();
         assertNotNull(v);
         //Assert.assertEquals(vehicle, v);
     }

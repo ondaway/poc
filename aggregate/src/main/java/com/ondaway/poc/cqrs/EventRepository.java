@@ -22,12 +22,12 @@ public class EventRepository<T extends AggregateRoot> implements Repository<T> {
     }
 
     @Override
-    public void Save(AggregateRoot aggregate) {
+    public void save(AggregateRoot aggregate) {
         this.store.save(aggregate.id, aggregate.getPendingEvents());
     }
 
     @Override
-    public Optional<T> GetById(UUID id, Class clazz) {
+    public Optional<T> getById(UUID id, Class clazz) {
         try {
             Factory<T> factory = Factory.createFactory(clazz);
             T instance = factory.create();
