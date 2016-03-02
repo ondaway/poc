@@ -8,9 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import static java.util.concurrent.CompletableFuture.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -26,21 +25,18 @@ public class BusInMemory implements Bus, CommandSender {
 
     @Override
     public <T> void registerHandler(String name, Consumer<T> handler) {
-        
-        Function<T, Optional<String>> wrapper = (T message) -> {
-            
-            final CompletableFuture future = CompletableFuture.runAsync(() -> { 
-                handler.accept(message);
+
+        Function<T, CompletableFuture<Optional<String>>> wrapper = (T message) -> {
+            final CompletableFuture<Optional<String>> future = supplyAsync(() -> {
+                try {
+                    handler.accept(message);
+                } catch (Exception ex) {
+                    Logger.getLogger(BusInMemory.class.getName()).log(Level.SEVERE, null, ex);
+                    return Optional.of("ERROR : " + ex.getCause());
+                }
+                return Optional.empty();
             });
-            
-            try {
-                future.get(5, TimeUnit.SECONDS);
-            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                Logger.getLogger(BusInMemory.class.getName()).log(Level.SEVERE, null, ex);
-                return Optional.of("error");
-            }
-            
-            return Optional.empty();
+            return future;
         };
         
         handlers.put(name, wrapper);
@@ -56,15 +52,29 @@ public class BusInMemory implements Bus, CommandSender {
 
     @Override
     public <T> Optional<String> executeHandlerFor(T message) {
-        return handlerFor(message).apply(message);
+        
+        CompletableFuture<Optional<String>> future = handlerFor(message).apply(message);
+        try {
+            Optional<String> result = future.get();
+            return result;
+        } catch (InterruptedException | ExecutionException ex) {
+            Logger.getLogger(BusInMemory.class.getName()).log(Level.SEVERE, null, ex);
+            return Optional.of("ERROR : " + ex.getCause());
+        }
+        
     }
 
-    private <T> Function<T, Optional<String>> handlerFor(T message) {
+    private <T> Function<T, CompletableFuture<Optional<String>>> handlerFor(T message) {
+
         String mssgName = message.getClass().getName();
-        System.out.println(mssgName);
-        Function<T, Optional<String>> handler = handlers.getOrDefault(mssgName, (m) -> {
-            return Optional.of("Handler not found for : " + m);
-        });
-        return handler;
+
+        Function<T, CompletableFuture<Optional<String>>> defaultWrapper = (T m) -> {
+            final CompletableFuture<Optional<String>> future = supplyAsync(() -> {
+                return Optional.of("ERROR : Handler Not Found");
+            });
+            return future;
+        };
+        
+        return handlers.getOrDefault(mssgName, defaultWrapper);
     }
 }
