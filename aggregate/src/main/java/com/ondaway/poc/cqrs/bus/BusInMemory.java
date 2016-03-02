@@ -44,7 +44,9 @@ public class BusInMemory implements Bus, CommandSender {
 
     @Override
     public <T extends Command> void emit(T command) throws InvalidCommandException {
+        
         Optional<String> error = this.executeHandlerFor(command);
+        
         if (error.isPresent()) {
             throw new InvalidCommandException();
         }
@@ -54,14 +56,13 @@ public class BusInMemory implements Bus, CommandSender {
     public <T> Optional<String> executeHandlerFor(T message) {
         
         CompletableFuture<Optional<String>> future = handlerFor(message).apply(message);
+        
         try {
-            Optional<String> result = future.get();
-            return result;
+            return future.get();
         } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(BusInMemory.class.getName()).log(Level.SEVERE, null, ex);
             return Optional.of("ERROR : " + ex.getCause());
         }
-        
     }
 
     private <T> Function<T, CompletableFuture<Optional<String>>> handlerFor(T message) {
