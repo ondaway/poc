@@ -1,5 +1,8 @@
 package com.ondaway.poc.cqrs;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 /**
  *
  * @author ernesto
@@ -9,9 +12,9 @@ public interface CommandSender {
     /**
      * 
      * @param <T>
-     * @param command
-     * @throws InvalidCommandException 
+     * @param message
+     * @return 
      */
-    <T extends Command> void emit(T command) throws InvalidCommandException;
+    <T> CompletableFuture<Optional<String>> emit(T message);
     
 }

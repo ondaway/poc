@@ -5,7 +5,13 @@ import com.ondaway.poc.cqrs.CommandSender;
 import com.ondaway.poc.cqrs.InvalidCommandException;
 import com.ondaway.poc.vehicle.command.Register;
 import com.ondaway.poc.vehicle.command.ReportStatus;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import spark.Response;
 import static spark.Spark.*;
 
@@ -36,10 +42,16 @@ public class API {
 
     private String _processCommand(Command command, Response response) {
         try {
-            bus.emit(command);
-            response.status(202);
-            return "Operation in progress";
-        } catch (InvalidCommandException ex) {
+            Optional<String> error = bus.emit(command).get(5,TimeUnit.SECONDS);
+            if (error.isPresent()) {
+                response.status(202);
+                return "Operation in progress";
+            } else {
+                response.status(500);
+                return "ERROR";
+            }
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
             response.status(500);
             return "ERROR";
         }
