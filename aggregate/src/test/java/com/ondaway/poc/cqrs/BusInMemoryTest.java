@@ -31,10 +31,10 @@ public class BusInMemoryTest {
         Activate command = new Activate(UUID.randomUUID(), UUID.randomUUID());
         
         // When
-        Optional<String> error = bus.emit(command).get();
-        
-        // Then
-        Assert.assertTrue(error.isPresent());
+        bus.emit(command, (err) -> {
+            //Then
+            Assert.assertTrue(err.isPresent());
+        }).get();
     }
     
     @Test

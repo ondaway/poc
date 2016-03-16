@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import static java.util.concurrent.CompletableFuture.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,10 +29,16 @@ public class BusInMemory implements Bus, CommandSender {
     public <T> CompletableFuture<Optional<String>> emit(T message) {
         return executeHandlerFor(message);
     }
-    
+
+    public <T> CompletableFuture<Optional<String>> emit(T message, Consumer<Optional<String>> callback) {
+        CompletableFuture future = emit(message);
+        future.thenAccept(callback);
+        return future;
+    }
+
     @Override
     public <T> CompletableFuture<Optional<String>> executeHandlerFor(T message) {
-        
+
         Consumer<T> handler = handlerFor(message);
 
         CompletableFuture<Optional<String>> future = supplyAsync(() -> {
@@ -39,14 +46,14 @@ public class BusInMemory implements Bus, CommandSender {
                 handler.accept(message);
             } catch (Exception ex) {
                 Logger.getLogger(BusInMemory.class.getName()).log(Level.SEVERE, null, ex);
-                return Optional.of("ERROR : " + ex.getCause());
+                return Optional.of("ERROR : " + ex.getClass().getName());
             }
             return Optional.empty();
         });
 
         return future;
     }
-    
+
     private <T> Consumer<T> handlerFor(T message) {
         String mssgName = message.getClass().getName();
         Consumer<T> handler = handlers.getOrDefault(mssgName, (mssg) -> {
@@ -54,6 +61,5 @@ public class BusInMemory implements Bus, CommandSender {
         });
         return handler;
     }
-
 
 }
